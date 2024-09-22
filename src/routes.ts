@@ -10,9 +10,11 @@ import deleteProjectSchema from './schemas/project/deleteProjectSchema'
 import updateProjectController from './controllers/project/updateProjectController'
 import updateProjectSchema from './schemas/project/updateProjectSchema'
 import homeController from './controllers/web/homeController'
+import adminController from './controllers/web/adminController'
 
 export default (router: Router) => {
   router.get('/', homeController)
+  router.get('/admin', adminController)
   router.post('/auth/login', (req, res) => {
     res.send('login')
   })
