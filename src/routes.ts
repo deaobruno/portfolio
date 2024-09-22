@@ -5,6 +5,8 @@ import createProjectSchema from './schemas/project/createProjectSchema'
 import getProjectsController from './controllers/project/getProjectsController'
 import getProjectByIdController from './controllers/project/getProjectByIdController'
 import getProjectByIdSchema from './schemas/project/getProjectByIdSchema'
+import deleteProjectController from './controllers/project/deleteProjectController'
+import deleteProjectSchema from './schemas/project/deleteProjectSchema'
 
 export default (router: Router) => {
   router.post('/auth/login', (req, res) => {
@@ -25,7 +27,5 @@ export default (router: Router) => {
     res.send('update project')
   })
 
-  router.delete('/projects/:project_id', (req, res) => {
-    res.send('delete project')
-  })
+  router.delete('/projects/:project_id', validatePayload(deleteProjectSchema), deleteProjectController)
 }
