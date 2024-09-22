@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import Controller from '../Controller'
 import Project from '../../models/Project'
 
 export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
     const { name, description } = req.body
 
     await Project.create({
@@ -12,5 +12,8 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
       created_at: new Date(),
     })
 
-    Controller.created(res)
+    res.send()
+  } catch (error) {
+    next(error)
   }
+}
