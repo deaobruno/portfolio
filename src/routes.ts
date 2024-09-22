@@ -4,6 +4,7 @@ import validatePayload from './middlewares/validatePayload'
 import createProjectSchema from './schemas/project/createProjectSchema'
 import getProjectsController from './controllers/project/getProjectsController'
 import getProjectByIdController from './controllers/project/getProjectByIdController'
+import getProjectByIdSchema from './schemas/project/getProjectByIdSchema'
 
 export default (router: Router) => {
   router.post('/auth/login', (req, res) => {
@@ -18,7 +19,7 @@ export default (router: Router) => {
 
   router.get('/projects', getProjectsController)
 
-  router.get('/projects/:project_id', getProjectByIdController)
+  router.get('/projects/:project_id', validatePayload(getProjectByIdSchema), getProjectByIdController)
 
   router.put('/projects/project_id', (req, res) => {
     res.send('update project')
