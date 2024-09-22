@@ -1,5 +1,6 @@
 import express, { json, NextFunction, Request, Response, Router } from 'express'
 import routes from './routes'
+import BaseError from './errors/BaseError'
 
 const app = express()
 const router = Router()
@@ -13,11 +14,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     .status(404)
     .json({ error: 'Invalid URL' })
 })
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
   console.log(error)
 
   res
-    .status(500)
+    .status(error.statusCode || 500)
     .json({ error: error.message })
 })
 
