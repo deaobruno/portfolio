@@ -1,4 +1,7 @@
 import { Router } from 'express'
+import createProjectController from './controllers/project/createProjectController'
+import validatePayload from './middlewares/validatePayload'
+import createProjectSchema from './schemas/project/createProjectSchema'
 
 export default (router: Router) => {
   router.post('/auth/login', (req, res) => {
@@ -9,9 +12,7 @@ export default (router: Router) => {
     res.send('logout')
   })
 
-  router.post('/projects', (req, res) => {
-    res.send('create project')
-  })
+  router.post('/projects', validatePayload(createProjectSchema), createProjectController)
 
   router.get('/projects', (req, res) => {
     res.send('list projects')
