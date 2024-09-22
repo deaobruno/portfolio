@@ -14,18 +14,28 @@ export default (router: Router) => {
   router.post('/auth/login', (req, res) => {
     res.send('login')
   })
-
   router.post('/auth/logout', (req, res) => {
     res.send('logout')
   })
-
-  router.post('/projects', validatePayload(createProjectSchema), createProjectController)
-
+  router.post(
+    '/projects',
+    validatePayload(createProjectSchema),
+    createProjectController,
+  )
   router.get('/projects', getProjectsController)
-
-  router.get('/projects/:project_id', validatePayload(getProjectByIdSchema), getProjectByIdController)
-
-  router.put('/projects/:project_id', validatePayload(updateProjectSchema), updateProjectController)
-
-  router.delete('/projects/:project_id', validatePayload(deleteProjectSchema), deleteProjectController)
+  router.get(
+    '/projects/:project_id',
+    validatePayload(getProjectByIdSchema),
+    getProjectByIdController,
+  )
+  router.put(
+    '/projects/:project_id',
+    validatePayload(updateProjectSchema),
+    updateProjectController,
+  )
+  router.delete(
+    '/projects/:project_id',
+    validatePayload(deleteProjectSchema),
+    deleteProjectController,
+  )
 }

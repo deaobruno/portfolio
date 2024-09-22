@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import Project from "../../models/Project";
+import { NextFunction, Request, Response } from 'express'
+import Project from '../../models/Project'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
