@@ -13,6 +13,9 @@ export default model('Project', new Schema({
     type: String,
     required: true,
   },
+  url: {
+    type: String,
+  },
   status: {
     type: Number,
     required: true

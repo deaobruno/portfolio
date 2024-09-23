@@ -27,6 +27,84 @@ function showNoProjects() {
   row.style.display = 'flex'
 }
 
+function renderEmptyCell(row) {
+  row.insertCell().appendChild(document.createTextNode(''))
+}
+
+function renderProjectName(row, name) {
+  if (!name) return renderEmptyCell(row)
+
+  row.insertCell().appendChild(document.createTextNode(name || ''))
+}
+
+function renderProjectUrl(row, url) {
+  if (!url) return renderEmptyCell(row)
+
+  const anchor = document.createElement('a')
+
+  anchor.href = url
+  anchor.innerHTML = 'Link'
+  anchor.setAttribute('target', '_blank')
+        
+  row.insertCell().appendChild(anchor)
+}
+
+function renderProjectGithub(row, github) {
+  if (!github) return renderEmptyCell(row)
+
+  row.insertCell().appendChild(document.createTextNode(github || ''))
+}
+
+function renderProjectStatus(row, status) {
+  if (!status) return renderEmptyCell(row)
+
+  row.insertCell().appendChild(document.createTextNode(status || ''))
+}
+
+function renderProjectActions(row) {
+  const anchor = document.createElement('a')
+        
+  anchor.className = 'cursor-pointer'
+  anchor.id = 'dropdownTable'
+  anchor.setAttribute('data-bs-toggle', 'dropdown')
+  anchor.setAttribute('aria-expanded', 'false')
+
+  const anchorDiv = document.createElement('div')
+
+  anchorDiv.className = 'text-white text-center me-2 d-flex align-items-center justify-content-center'
+
+  const icon = document.createElement('i')
+
+  icon.className = 'fa fa-ellipsis-v text-secondary'
+  anchorDiv.appendChild(icon)
+  anchor.appendChild(anchorDiv)
+
+  const unorderedList = document.createElement('ul')
+
+  unorderedList.className = 'dropdown-menu px-2 py-3 ms-sm-n4 ms-n5'
+  unorderedList.setAttribute('aria-labelledby', 'dropdownTable')
+
+  const updateListItem = document.createElement('li')
+  const updateListItemAnchor = document.createElement('a')
+
+  updateListItemAnchor.className = 'dropdown-item border-radius-md'
+  updateListItemAnchor.href = 'javascript:;'
+  updateListItemAnchor.innerHTML = 'Update'
+  updateListItem.appendChild(updateListItemAnchor)
+
+  const deleteListItem = document.createElement('li')
+  const deleteListItemAnchor = document.createElement('a')
+
+  deleteListItemAnchor.className = 'dropdown-item border-radius-md'
+  deleteListItemAnchor.href = 'javascript:;'
+  deleteListItemAnchor.innerHTML = 'Delete'
+  deleteListItem.appendChild(deleteListItemAnchor)
+
+  unorderedList.append(updateListItem, deleteListItem)
+
+  row.insertCell().append(anchor, unorderedList)
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   request.get({
     url: 'http://localhost:3000/projects',
@@ -52,52 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
       response.forEach(project => {
         const row = tableBody.insertRow()
 
-        row.insertCell().appendChild(document.createTextNode(project.name || ''))
-        row.insertCell().appendChild(document.createTextNode(project.link || ''))
-        row.insertCell().appendChild(document.createTextNode(project.github || ''))
-        row.insertCell().appendChild(document.createTextNode(project.status || ''))
-
-        const anchor = document.createElement('a')
-        
-        anchor.className = 'cursor-pointer'
-        anchor.id = 'dropdownTable'
-        anchor.setAttribute('data-bs-toggle', 'dropdown')
-        anchor.setAttribute('aria-expanded', 'false')
-
-        const anchorDiv = document.createElement('div')
-
-        anchorDiv.className = 'text-white text-center me-2 d-flex align-items-center justify-content-center'
-
-        const icon = document.createElement('i')
-
-        icon.className = 'fa fa-ellipsis-v text-secondary'
-        anchorDiv.appendChild(icon)
-        anchor.appendChild(anchorDiv)
-
-        const unorderedList = document.createElement('ul')
-
-        unorderedList.className = 'dropdown-menu px-2 py-3 ms-sm-n4 ms-n5'
-        unorderedList.setAttribute('aria-labelledby', 'dropdownTable')
-
-        const updateListItem = document.createElement('li')
-        const updateListItemAnchor = document.createElement('a')
-
-        updateListItemAnchor.className = 'dropdown-item border-radius-md'
-        updateListItemAnchor.href = 'javascript:;'
-        updateListItemAnchor.innerHTML = 'Update'
-        updateListItem.appendChild(updateListItemAnchor)
-
-        const deleteListItem = document.createElement('li')
-        const deleteListItemAnchor = document.createElement('a')
-
-        deleteListItemAnchor.className = 'dropdown-item border-radius-md'
-        deleteListItemAnchor.href = 'javascript:;'
-        deleteListItemAnchor.innerHTML = 'Delete'
-        deleteListItem.appendChild(deleteListItemAnchor)
-
-        unorderedList.append(updateListItem, deleteListItem)
-
-        row.insertCell().append(anchor, unorderedList)
+        renderProjectName(row, project.name)
+        renderProjectUrl(row, project.url)
+        renderProjectGithub(row, project.github)
+        renderProjectStatus(row, project.status)
+        renderProjectActions(row)
       })
 
       tableDiv.style.display = 'block'

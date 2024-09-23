@@ -9,6 +9,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
         return {
           id: project.project_id,
           name: project.name,
+          url: project.url,
           status: ProjectStatus[project.status],
         }
       })
