@@ -49,10 +49,16 @@ function renderProjectUrl(row, url) {
   row.insertCell().appendChild(anchor)
 }
 
-function renderProjectGithub(row, github) {
-  if (!github) return renderEmptyCell(row)
+function renderProjectRepository(row, repository) {
+  if (!repository) return renderEmptyCell(row)
 
-  row.insertCell().appendChild(document.createTextNode(github || ''))
+  const anchor = document.createElement('a')
+
+  anchor.href = repository
+  anchor.innerHTML = 'Link'
+  anchor.setAttribute('target', '_blank')
+        
+  row.insertCell().appendChild(anchor)
 }
 
 function renderProjectStatus(row, status) {
@@ -132,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderProjectName(row, project.name)
         renderProjectUrl(row, project.url)
-        renderProjectGithub(row, project.github)
+        renderProjectRepository(row, project.repository)
         renderProjectStatus(row, project.status)
         renderProjectActions(row)
       })

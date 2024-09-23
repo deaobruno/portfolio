@@ -16,6 +16,9 @@ export default model('Project', new Schema({
   url: {
     type: String,
   },
+  repository: {
+    type: String,
+  },
   status: {
     type: Number,
     required: true
