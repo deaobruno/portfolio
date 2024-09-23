@@ -1,3 +1,46 @@
+document.addEventListener('DOMContentLoaded', updateProjects())
+
+async function updateProjects() {
+  await request.get({ url: 'http://localhost:3000/projects' })
+    .then(response => {
+      const noProjects = document.getElementById('noProjects')
+
+      if (noProjects) noProjects.style.display = 'none'
+
+      const tableDiv = document.getElementsByClassName('table-responsive')[0]
+
+      if (!tableDiv) return
+
+      const table = tableDiv.getElementsByClassName('table')[0]
+
+      if (!table) return
+
+      const tableBody = table.getElementsByTagName('tbody')[0]
+
+      if (!tableBody) return
+
+      if (response.length <= 0) return showNoProjects()
+
+      tableBody.innerHTML = ''
+
+      response.forEach(project => {
+        const row = tableBody.insertRow()
+
+        renderProjectName(row, project.name)
+        renderProjectUrl(row, project.url)
+        renderProjectRepository(row, project.repository)
+        renderProjectStatus(row, project.status)
+        renderProjectActions(row, project.id)
+      })
+
+      tableDiv.style.display = 'block'
+    })
+    .catch(error => {
+      console.log(error)
+      showNoProjects()
+    })
+}
+
 function showNoProjects() {
   const tableDiv = document.getElementsByClassName('table-responsive')[0]
 
@@ -67,7 +110,7 @@ function renderProjectStatus(row, status) {
   row.insertCell().appendChild(document.createTextNode(status || ''))
 }
 
-function renderProjectActions(row) {
+function renderProjectActions(row, projectId) {
   const anchor = document.createElement('a')
         
   anchor.className = 'cursor-pointer'
@@ -102,52 +145,19 @@ function renderProjectActions(row) {
   const deleteListItemAnchor = document.createElement('a')
 
   deleteListItemAnchor.className = 'dropdown-item border-radius-md'
-  deleteListItemAnchor.href = 'javascript:;'
+  deleteListItemAnchor.style.cursor = 'pointer'
   deleteListItemAnchor.innerHTML = 'Delete'
+  deleteListItemAnchor.setAttribute('data-project-id', projectId)
+  deleteListItemAnchor.onclick = async event => {
+    event.preventDefault()
+
+    await request.delete({ url: `http://localhost:3000/projects/${projectId}` })
+      .then(async () => await updateProjects())
+      .catch(console.log)
+  }
   deleteListItem.appendChild(deleteListItemAnchor)
 
   unorderedList.append(updateListItem, deleteListItem)
 
   row.insertCell().append(anchor, unorderedList)
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  request.get({
-    url: 'http://localhost:3000/projects',
-    onSuccess: response => {
-      const noProjects = document.getElementById('noProjects')
-
-      if (noProjects) noProjects.style.display = 'none'
-
-      const tableDiv = document.getElementsByClassName('table-responsive')[0]
-
-      if (!tableDiv) return
-
-      const table = tableDiv.getElementsByClassName('table')[0]
-
-      if (!table) return
-
-      const tableBody = table.getElementsByTagName('tbody')[0]
-
-      if (!tableBody) return
-
-      if (response.length <= 0) return showNoProjects()
-
-      response.forEach(project => {
-        const row = tableBody.insertRow()
-
-        renderProjectName(row, project.name)
-        renderProjectUrl(row, project.url)
-        renderProjectRepository(row, project.repository)
-        renderProjectStatus(row, project.status)
-        renderProjectActions(row)
-      })
-
-      tableDiv.style.display = 'block'
-    },
-    onError: error => {
-      console.log(error)
-      showNoProjects()
-    }
-  })
-})

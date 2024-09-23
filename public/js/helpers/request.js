@@ -1,34 +1,41 @@
-const sendRequest = (method, url, headers, data, file, onSuccess, onError) => {
-  const xhr = new XMLHttpRequest()
+const sendRequest = (method, url, headers, data, file) =>
+  new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
 
-  xhr.open(method, url, true)
-  xhr.onreadystatechange = function () {
-    if (this.readyState != 4) return
+    xhr.open(method, url, true)
 
-    const responseText = this.responseText
-    const response = responseText === '' ? responseText : JSON.parse(responseText)
+    if (headers)
+      Object.keys(headers).forEach(header => xhr.setRequestHeader(header, headers[header]))
 
-    if ((this.status < 200 || this.status >= 400) && onError) return onError(response)
-    if (onSuccess) onSuccess(response)
-  }
+    xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, max-age=0')
 
-  if (headers)
-    Object.keys(headers).forEach(header => xhr.setRequestHeader(header, headers[header]))
+    if (file) {
+      const form = new FormData(data)
+      form.append('attachment', file)
+      return xhr.send(form)
+    }
 
-  if (file) {
-    const form = new FormData(data)
-    form.append('attachment', file)
-    return xhr.send(form)
-  }
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== 4) return
 
-  xhr.send(JSON.stringify(data))
-}
+      const responseText = xhr.responseText
+      const response = responseText === '' ? responseText : JSON.parse(responseText)
+
+      if (xhr.status < 200 || xhr.status >= 400) return reject(response)
+
+      return resolve(response)
+    }
+
+    return xhr.send(JSON.stringify(data))
+  })
 
 const request = {
-  get: ({ url, headers, data, file, onSuccess, onError }) =>
-    sendRequest('GET', url, headers, data, file, onSuccess, onError),
-  post: ({ url, headers, data, file, onSuccess, onError }) =>
-    sendRequest('POST', url, headers, data, file, onSuccess, onError),
-  delete: ({ url, headers, data, file, onSuccess, onError }) => 
-    sendRequest('DELETE', url, headers, data, file, onSuccess, onError),
+  get: ({ url, headers, data, file }) =>
+    sendRequest('GET', url, headers, data, file),
+  post: ({ url, headers, data, file }) =>
+    sendRequest('POST', url, headers, data, file),
+  put: ({ url, headers, data, file }) =>
+    sendRequest('PUT', url, headers, data, file),
+  delete: ({ url, headers, data, file }) => 
+    sendRequest('DELETE', url, headers, data, file),
 }
