@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import Project from '../../models/Project'
+import Project from '../../models/project/Project'
 import NotFoundError from '../../errors/NotFoundError'
 
 export default async (req: Request, res: Response, next: NextFunction) => {

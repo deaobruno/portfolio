@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import Project from '../../models/Project'
+import Project from '../../models/project/Project'
 
 export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

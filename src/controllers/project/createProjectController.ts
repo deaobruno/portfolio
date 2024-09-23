@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import Project from '../../models/Project'
+import Project from '../../models/project/Project'
+import ProjectStatus from '../../models/project/ProjectStatus'
 
 export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -9,6 +10,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
       project_id: crypto.randomUUID(),
       name,
       description,
+      status: ProjectStatus.ACTIVE,
       created_at: new Date(),
     })
 

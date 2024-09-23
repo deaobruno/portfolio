@@ -13,6 +13,10 @@ export default model('Project', new Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: Number,
+    required: true
+  },
   created_at: {
     type: Date,
     required: true,
