@@ -19,6 +19,7 @@ export default (router: Router) => {
   router.get('/admin', adminController)
   router.get('/admin/projects', projectsController)
   router.get('/admin/create-project', projectFormController)
+  router.get('/admin/update-project/:project_id', projectFormController)
   router.post('/auth/login', (req, res) => {
     res.send('login')
   })

@@ -137,7 +137,7 @@ function renderProjectActions(row, projectId) {
   const updateListItemAnchor = document.createElement('a')
 
   updateListItemAnchor.className = 'dropdown-item border-radius-md'
-  updateListItemAnchor.href = 'javascript:;'
+  updateListItemAnchor.href = `/admin/update-project/${projectId}`
   updateListItemAnchor.innerHTML = 'Update'
   updateListItem.appendChild(updateListItemAnchor)
 
@@ -153,7 +153,7 @@ function renderProjectActions(row, projectId) {
 
     await request.delete({ url: `http://localhost:3000/projects/${projectId}` })
       .then(async () => await updateProjects())
-      .catch(console.log)
+      .catch(error => alert(error.error))
   }
   deleteListItem.appendChild(deleteListItemAnchor)
 
