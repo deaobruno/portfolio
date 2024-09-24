@@ -12,11 +12,13 @@ import updateProjectSchema from './schemas/project/updateProjectSchema'
 import homeController from './controllers/web/homeController'
 import adminController from './controllers/web/adminController'
 import projectsController from './controllers/web/projectsController'
+import projectFormController from './controllers/web/projectFormController'
 
 export default (router: Router) => {
   router.get('/', homeController)
   router.get('/admin', adminController)
   router.get('/admin/projects', projectsController)
+  router.get('/admin/create-project', projectFormController)
   router.post('/auth/login', (req, res) => {
     res.send('login')
   })

@@ -7,6 +7,7 @@ const sendRequest = (method, url, headers, data, file) =>
     if (headers)
       Object.keys(headers).forEach(header => xhr.setRequestHeader(header, headers[header]))
 
+    xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, max-age=0')
 
     if (file) {
