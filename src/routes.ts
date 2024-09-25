@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import createProjectController from './controllers/project/createProjectController'
-import validatePayload from './middlewares/validatePayload'
+import validatePayloadMiddleware from './middlewares/validatePayloadMiddleware'
 import createProjectSchema from './schemas/project/createProjectSchema'
 import getProjectsController from './controllers/project/getProjectsController'
 import getProjectByIdController from './controllers/project/getProjectByIdController'
@@ -11,11 +11,18 @@ import updateProjectController from './controllers/project/updateProjectControll
 import updateProjectSchema from './schemas/project/updateProjectSchema'
 import homeController from './controllers/web/homeController'
 import projectFormController from './controllers/web/projectFormController'
+import uploadFileMiddleware from './middlewares/uploadFileMiddleware'
 
 export default (router: Router) => {
   router.get('/', homeController)
-  router.get('/admin/create-project', projectFormController)
-  router.get('/admin/update-project/:project_id', projectFormController)
+  router.get(
+    '/admin/create-project',
+    projectFormController,
+  )
+  router.get(
+    '/admin/update-project/:project_id',
+    projectFormController,
+  )
   router.post('/auth/login', (req, res) => {
     res.send('login')
   })
@@ -24,23 +31,25 @@ export default (router: Router) => {
   })
   router.post(
     '/projects',
-    validatePayload(createProjectSchema),
+    uploadFileMiddleware,
+    validatePayloadMiddleware(createProjectSchema),
     createProjectController,
   )
   router.get('/projects', getProjectsController)
   router.get(
     '/projects/:project_id',
-    validatePayload(getProjectByIdSchema),
+    validatePayloadMiddleware(getProjectByIdSchema),
     getProjectByIdController,
   )
   router.put(
     '/projects/:project_id',
-    validatePayload(updateProjectSchema),
+    uploadFileMiddleware,
+    validatePayloadMiddleware(updateProjectSchema),
     updateProjectController,
   )
   router.delete(
     '/projects/:project_id',
-    validatePayload(deleteProjectSchema),
+    validatePayloadMiddleware(deleteProjectSchema),
     deleteProjectController,
   )
 }

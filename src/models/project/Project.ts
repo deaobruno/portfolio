@@ -19,6 +19,9 @@ export default model('Project', new Schema({
   repository: {
     type: String,
   },
+  cover: {
+    type: String,
+  },
   status: {
     type: Number,
     required: true
