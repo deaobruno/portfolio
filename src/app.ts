@@ -1,8 +1,8 @@
 import config from './config'
-import server from './server'
-import db from './db'
+import server from './drivers/server'
+import db from './drivers/db'
 
-(async () => {
+;(async () => {
   await db.start(config.db.mongo.url)
   server.start(config.api.http.port)
 })()

@@ -1,17 +1,15 @@
 import { createServer } from 'node:http'
 import { join } from 'node:path'
 import express, { json, NextFunction, Request, Response, Router, urlencoded } from 'express'
-import pino from 'pino'
 import ejs from 'ejs'
-import routes from './routes'
-import BaseError from './errors/BaseError'
+import logger from './logger'
+import routes from '../routes'
+import BaseError from '../errors/BaseError'
+import logRequestMiddleware from '../middlewares/logRequestMiddleware'
 
 const app = express()
 const router = Router()
 const server = createServer(app)
-const logger = pino({
-
-})
 const publicDir = 'public'
 const htmlDir = join(publicDir, 'html')
 
@@ -23,21 +21,15 @@ app.use(express.static(publicDir))
 app.set('views', htmlDir)
 app.engine('html', ejs.renderFile)
 app.set('view engine', 'html')
-app.use((req, res, next) => {
-  req.on('close', () => logger.info({
-    method: req.method,
-    url: req.url,
-    status: res.statusCode,
-  }))
-  next()
-})
+app.use(logRequestMiddleware)
 app.use(router)
-app.use((req: Request, res: Response) => res.status(404).json({ error: 'Invalid URL' }))
+app.use((req: Request, res: Response) => res.status(404).send({ error: 'Invalid URL' }))
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
-  console.log(error)
+  logger.error(error)
+
   res
     .status(error.statusCode || 500)
-    .json({ error: error.message })
+    .send({ error: error.message })
 })
 
 export default {
@@ -53,6 +45,6 @@ export default {
       )
         address = serverAddress.address
   
-      console.log(`[Express] HTTP Server started: http://${address}:${port}`)
+      logger.info(`[Express] HTTP Server started: http://${address}:${port}`)
     })
 }
