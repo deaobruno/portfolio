@@ -4,5 +4,5 @@ import db from './drivers/db'
 
 ;(async () => {
   await db.start(config.db.mongo.url)
-  server.start(config.api.http.port)
+  server.start(config.http.port)
 })()

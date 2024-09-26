@@ -12,6 +12,8 @@ import updateProjectSchema from './schemas/project/updateProjectSchema'
 import homeController from './controllers/web/homeController'
 import projectFormController from './controllers/web/projectFormController'
 import uploadFileMiddleware from './middlewares/uploadFileMiddleware'
+import loginController from './controllers/auth/loginController'
+import loginSchema from './schemas/auth/loginSchema'
 
 export default (router: Router) => {
   router.get('/', homeController)
@@ -23,9 +25,11 @@ export default (router: Router) => {
     '/admin/update-project/:project_id',
     projectFormController,
   )
-  router.post('/auth/login', (req, res) => {
-    res.send('login')
-  })
+  router.post(
+    '/auth/login',
+    validatePayloadMiddleware(loginSchema),
+    loginController,
+  )
   router.post('/auth/logout', (req, res) => {
     res.send('logout')
   })
