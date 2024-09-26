@@ -6,7 +6,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
   try {
     const { project_id } = req.params
     const { name, description, url, repository } = req.body
-    const cover = req.file && resolve(req.file.path)
+    const cover = req.file && req.file.path.replace('public', '')
 
     await Project.updateOne({ project_id }, {
       name,

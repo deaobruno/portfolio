@@ -14,6 +14,13 @@ document.getElementById('projectForm').addEventListener('submit', async element 
   inputs['project_id'] ? updateProject(inputs['project_id'].value, data, file) : createProject(data, file, form)
 })
 
+document.getElementById('attachment').onchange = event => {
+  const [file] = event.target.files
+
+  if (file)
+    document.getElementById('cover').src = URL.createObjectURL(file)
+}
+
 async function createProject(data, file, form) {
   await request.post({
     url: '/projects',

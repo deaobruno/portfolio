@@ -87,10 +87,12 @@
                     <input type="hidden" name="project_id" value="<%= locals.project && locals.project.project_id %>"/>
                   <% } %>
                   <% if (locals.project && locals.project.cover) { %>
-                    <img src="<%= locals.project.cover %>" alt="project cover">
+                    <div class="input-group input-group-outline mb-3">
+                      <img id="cover" src="<%= locals.project.cover %>" style="max-height: 200px;" alt="project cover">
+                    </div>
                   <% } %>
                   <div class="input-group input-group-outline mb-3">
-                    <input type="file" name="attachment" class="form-control"/>
+                    <input id="attachment" type="file" name="attachment" class="form-control"/>
                   </div>
                   <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.name && 'is-filled' %>">
                     <label class="form-label">Name</label>
