@@ -1,6 +1,7 @@
 import { createServer } from 'node:http'
 import { join } from 'node:path'
 import express, { json, NextFunction, Request, Response, Router, urlencoded } from 'express'
+import pino from 'pino'
 import ejs from 'ejs'
 import routes from './routes'
 import BaseError from './errors/BaseError'
@@ -8,6 +9,9 @@ import BaseError from './errors/BaseError'
 const app = express()
 const router = Router()
 const server = createServer(app)
+const logger = pino({
+
+})
 const publicDir = 'public'
 const htmlDir = join(publicDir, 'html')
 
@@ -19,6 +23,14 @@ app.use(express.static(publicDir))
 app.set('views', htmlDir)
 app.engine('html', ejs.renderFile)
 app.set('view engine', 'html')
+app.use((req, res, next) => {
+  req.on('close', () => logger.info({
+    method: req.method,
+    url: req.url,
+    status: res.statusCode,
+  }))
+  next()
+})
 app.use(router)
 app.use((req: Request, res: Response) => res.status(404).json({ error: 'Invalid URL' }))
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {

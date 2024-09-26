@@ -3,37 +3,32 @@ document.getElementById('projectForm').addEventListener('submit', async element 
 
   const form = element.target
   const inputs = form.getElementsByTagName('input')
-  
-  inputs['id'] ? updateProject(inputs) : createProject(inputs)
-})
-
-async function createProject(inputs) {
   const data = {
     name: inputs['name'].value,
     description: inputs['description'].value,
     url: inputs['url'].value,
     repository: inputs['repository'].value,
   }
+  const file = inputs['attachment'].files[0]
 
+  inputs['project_id'] ? updateProject(inputs['project_id'].value, data, file) : createProject(data, file, form)
+})
+
+async function createProject(data, file, form) {
   await request.post({
     url: '/projects',
     data,
+    file,
   })
     .then(() => form.reset())
     .catch(error => alert(error.error))
 }
 
-async function updateProject(inputs) {
-  const data = {
-    name: inputs['name'].value,
-    description: inputs['description'].value,
-    url: inputs['url'].value,
-    repository: inputs['repository'].value,
-  }
-
+async function updateProject(id, data, file) {
   await request.put({
-    url: `/projects/${inputs['id'].value}`,
+    url: `/projects/${id}`,
     data,
+    file,
   })
     .then(() => alert('Project updated'))
     .catch(error => alert(error.error))

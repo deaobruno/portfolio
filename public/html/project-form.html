@@ -16,59 +16,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="76x76"
-      href="/vendor/material-dashboard/assets/img/apple-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/vendor/material-dashboard/assets/img/favicon.png"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="/vendor/material-dashboard/assets/img/apple-icon.png"/>
+    <link rel="icon" type="image/png" href="/vendor/material-dashboard/assets/img/favicon.png"/>
     <title>My Portfolio - Project Form</title>
-    <!--     Fonts and icons     -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700"
-    />
-    <!-- Nucleo Icons -->
-    <link
-      href="/vendor/material-dashboard/assets/css/nucleo-icons.css"
-      rel="stylesheet"
-    />
-    <link
-      href="/vendor/material-dashboard/assets/css/nucleo-svg.css"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome Icons -->
-    <script
-      src="https://kit.fontawesome.com/42d5adcbca.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Material Icons -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
-      rel="stylesheet"
-    />
-    <!-- CSS Files -->
-    <link
-      id="pagestyle"
-      href="/vendor/material-dashboard/assets/css/material-dashboard.css"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+    <link id="pagestyle" href="/vendor/material-dashboard/assets/css/material-dashboard.css" rel="stylesheet"/>
   </head>
 
   <body class="g-sidenav-show bg-gray-200">
-    <aside
-      class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
-      id="sidenav-main"
-    >
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
       <div class="sidenav-header">
         <a class="navbar-brand m-0" href="#" target="_blank">
           <span class="ms-1 font-weight-bold text-white">My Portfolio</span>
@@ -86,13 +43,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a
-              class="nav-link text-white <%= !locals.project && 'active bg-gradient-primary' %>"
-              href="/admin/create-project"
-            >
-              <div
-                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
-              >
+            <a class="nav-link text-white <%= !locals.project && 'active bg-gradient-primary' %>" href="/admin/create-project">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="material-icons opacity-10">table_view</i>
               </div>
               <span class="nav-link-text ms-1">New Project</span>
@@ -101,37 +53,19 @@
         </ul>
       </div>
     </aside>
-    <main
-      class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-    >
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
       <!-- Navbar -->
-      <nav
-        class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
-        id="navbarBlur"
-        data-scroll="true"
-      >
+      <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
         <div class="container-fluid py-1 px-3">
           <nav aria-label="breadcrumb">
-            <ol
-              class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5"
-            >
+            <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
               <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="javascript:;">Pages</a>
               </li>
               <% if (locals.project) { %>
-              <li
-                class="breadcrumb-item text-sm text-dark active"
-                aria-current="page"
-              >
-                Update Project
-              </li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Update Project</li>
               <% } else { %>
-              <li
-                class="breadcrumb-item text-sm text-dark active"
-                aria-current="page"
-              >
-                New Project
-              </li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">New Project</li>
               <% } %>
             </ol>
           </nav>
@@ -148,73 +82,37 @@
           <div class="col">
             <div class="card">
               <div class="card-body">
-                <form id="projectForm" role="form" class="text-start">
-                  <% if (locals.project && locals.project.id) { %>
-                  <input
-                    type="hidden"
-                    name="id"
-                    value="<%= locals.project && locals.project.project_id %>"
-                  />
+                <form id="projectForm" role="form" class="text-start" enctype="multipart/form-data">
+                  <% if (locals.project && locals.project.project_id) { %>
+                    <input type="hidden" name="project_id" value="<%= locals.project && locals.project.project_id %>"/>
                   <% } %>
-                  <div
-                    class="input-group input-group-outline mb-3 <%= locals.project && locals.project.name && 'is-filled' %>"
-                  >
+                  <% if (locals.project && locals.project.cover) { %>
+                    <img src="<%= locals.project.cover %>" alt="project cover">
+                  <% } %>
+                  <div class="input-group input-group-outline mb-3">
+                    <input type="file" name="attachment" class="form-control"/>
+                  </div>
+                  <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.name && 'is-filled' %>">
                     <label class="form-label">Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      class="form-control"
-                      value="<%= locals.project && locals.project.name %>"
-                    />
+                    <input type="text" name="name" class="form-control" value="<%= locals.project && locals.project.name %>"/>
                   </div>
-                  <div
-                    class="input-group input-group-outline mb-3 <%= locals.project && locals.project.description && 'is-filled' %>"
-                  >
+                  <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.description && 'is-filled' %>">
                     <label class="form-label">Description</label>
-                    <input
-                      type="text"
-                      name="description"
-                      class="form-control"
-                      value="<%= locals.project && locals.project.description %>"
-                    />
+                    <input type="text" name="description" class="form-control" value="<%= locals.project && locals.project.description %>"/>
                   </div>
-                  <div
-                    class="input-group input-group-outline mb-3 <%= locals.project && locals.project.url && 'is-filled' %>"
-                  >
+                  <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.url && 'is-filled' %>">
                     <label class="form-label">URL</label>
-                    <input
-                      type="text"
-                      name="url"
-                      class="form-control"
-                      value="<%= locals.project && locals.project.url %>"
-                    />
+                    <input type="text" name="url" class="form-control" value="<%= locals.project && locals.project.url %>"/>
                   </div>
-                  <div
-                    class="input-group input-group-outline mb-3 <%= locals.project && locals.project.repository && 'is-filled' %>"
-                  >
+                  <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.repository && 'is-filled' %>">
                     <label class="form-label">Repository</label>
-                    <input
-                      type="text"
-                      name="repository"
-                      class="form-control"
-                      value="<%= locals.project && locals.project.repository %>"
-                    />
+                    <input type="text" name="repository" class="form-control" value="<%= locals.project && locals.project.repository %>"/>
                   </div>
                   <div class="text-center">
                     <% if (locals.project) { %>
-                    <button
-                      type="submit"
-                      class="btn bg-gradient-primary my-4 mb-2"
-                    >
-                      Update
-                    </button>
+                      <button type="submit" class="btn bg-gradient-primary my-4 mb-2">Update</button>
                     <% } else { %>
-                    <button
-                      type="submit"
-                      class="btn bg-gradient-primary my-4 mb-2"
-                    >
-                      Create
-                    </button>
+                      <button type="submit" class="btn bg-gradient-primary my-4 mb-2">Create</button>
                     <% } %>
                   </div>
                 </form>
@@ -224,13 +122,6 @@
         </div>
       </div>
     </main>
-    <!--   Core JS Files   -->
-    <script src="/vendor/material-dashboard/assets/js/core/popper.min.js"></script>
-    <script src="/vendor/material-dashboard/assets/js/core/bootstrap.min.js"></script>
-    <script src="/vendor/material-dashboard/assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="/vendor/material-dashboard/assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="/vendor/material-dashboard/assets/js/material-dashboard.min.js?v=3.1.0"></script>
     <script type="text/javascript" src="/js/helpers/request.js"></script>
     <script type="text/javascript" src="/js/project-form.js"></script>
   </body>
