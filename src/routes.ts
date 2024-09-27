@@ -15,6 +15,7 @@ import loginSchema from './schemas/auth/loginSchema'
 import authenticateMiddleware from './middlewares/authenticateMiddleware'
 import logoutController from './controllers/auth/logoutController'
 import loginFormController from './controllers/web/loginFormController'
+import parseCookiesMiddleware from './middlewares/parseCookiesMiddleware'
 
 export default (router: Router) => {
   router.get('/', homeController)
@@ -34,19 +35,27 @@ export default (router: Router) => {
   )
   router.delete(
     '/auth',
+    parseCookiesMiddleware,
     authenticateMiddleware,
     logoutController,
   )
   router.post(
     '/projects',
+    parseCookiesMiddleware,
     authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(createProjectSchema),
     createProjectController,
   )
-  router.get('/projects', getProjectsController)
+  router.get(
+    '/projects',
+    parseCookiesMiddleware,
+    authenticateMiddleware,
+    getProjectsController,
+  )
   router.put(
     '/projects/:project_id',
+    parseCookiesMiddleware,
     authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(updateProjectSchema),
@@ -54,6 +63,7 @@ export default (router: Router) => {
   )
   router.delete(
     '/projects/:project_id',
+    parseCookiesMiddleware,
     authenticateMiddleware,
     validatePayloadMiddleware(deleteProjectSchema),
     deleteProjectController,

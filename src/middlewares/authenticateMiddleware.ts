@@ -5,13 +5,12 @@ import UnauthorizedError from '../errors/UnauthorizedError'
 import cache from '../drivers/cache'
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const { authorization } = req.headers
+  const { cookies } = req
 
-  if (!authorization) return next(UnauthorizedError('Empty authorization header'))
+  if (!cookies) return next(UnauthorizedError('Empty cookies'))
 
-  const [type, token] = authorization.split(' ')
+  const { access_token: token } = cookies
 
-  if (type !== 'Bearer') return next(UnauthorizedError('Invalid authentication type'))
   if (!token) return next(UnauthorizedError('Empty token'))
 
   let access: any
