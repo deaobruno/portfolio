@@ -20,9 +20,12 @@ document
   .getElementById('attachment')
   .onchange = event => {
     const [file] = event.target.files
+    const cover = document.getElementById('cover')
 
-    if (file)
-      document.getElementById('cover').src = URL.createObjectURL(file)
+    if (cover && file) {
+      cover.src = URL.createObjectURL(file)
+      cover.style.display = 'block'
+    }
   }
 
 async function createProject(data, file, form) {
@@ -31,7 +34,21 @@ async function createProject(data, file, form) {
     data,
     file,
   })
-    .then(() => form.reset())
+    .then(() => {
+      form.reset()
+
+      const cover = document.getElementById('cover')
+
+      cover.style.display = 'none'
+      cover.src = ''
+
+      const inputs = form.getElementsByTagName('input')
+
+      inputs['name'].parentElement.classList.remove('is-filled')
+      inputs['description'].parentElement.classList.remove('is-filled')
+      inputs['url'].parentElement.classList.remove('is-filled')
+      inputs['repository'].parentElement.classList.remove('is-filled')
+    })
     .catch(error => alert(JSON.stringify(error)))
 }
 

@@ -86,11 +86,13 @@
                   <% if (locals.project && locals.project.project_id) { %>
                     <input type="hidden" name="project_id" value="<%= locals.project && locals.project.project_id %>"/>
                   <% } %>
-                  <% if (locals.project && locals.project.cover) { %>
-                    <div class="input-group input-group-outline mb-3">
+                  <div class="input-group input-group-outline mb-3">
+                    <% if (locals.project && locals.project.cover) { %>
                       <img id="cover" src="<%= locals.project.cover %>" style="max-height: 200px;" alt="project cover">
-                    </div>
-                  <% } %>
+                    <% } else { %>
+                      <img id="cover" style="max-height: 200px; display: none;" alt="project cover">
+                    <% } %>
+                  </div>
                   <div class="input-group input-group-outline mb-3">
                     <input id="attachment" type="file" name="attachment" class="form-control"/>
                   </div>
@@ -124,6 +126,9 @@
         </div>
       </div>
     </main>
+    <script src="/vendor/material-dashboard/assets/js/core/bootstrap.min.js"></script>
+    <script src="/vendor/material-dashboard/assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/vendor/material-dashboard/assets/js/material-dashboard.min.js?v=3.1.0"></script>
     <script type="text/javascript" src="/js/helpers/request.js"></script>
     <script type="text/javascript" src="/js/helpers/logout.js"></script>
     <script type="text/javascript" src="/js/project-form.js"></script>
