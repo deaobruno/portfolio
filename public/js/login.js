@@ -15,5 +15,5 @@ document
       data,
     })
       .then(({ url }) => window.location.replace(url))
-      .catch(error => alert(error.error))
+      .catch(error => alert(JSON.stringify(error)))
   })

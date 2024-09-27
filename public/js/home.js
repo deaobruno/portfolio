@@ -153,7 +153,7 @@ function renderProjectActions(row, projectId) {
 
     await request.delete({ url: `http://localhost:3000/projects/${projectId}` })
       .then(async () => await updateProjects())
-      .catch(error => alert(error.error))
+      .catch(error => alert(JSON.stringify(error)))
   }
   deleteListItem.appendChild(deleteListItemAnchor)
 

@@ -5,13 +5,9 @@ import UnauthorizedError from '../errors/UnauthorizedError'
 import cache from '../drivers/cache'
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const { cookies } = req
+  const { access_token: token } = req.cookies
 
-  if (!cookies) return next(UnauthorizedError('Empty cookies'))
-
-  const { access_token: token } = cookies
-
-  if (!token) return next(UnauthorizedError('Empty token'))
+  if (!token) return next(UnauthorizedError('Empty access token'))
 
   let access: any
 

@@ -32,7 +32,7 @@ async function createProject(data, file, form) {
     file,
   })
     .then(() => form.reset())
-    .catch(error => alert(error.error))
+    .catch(error => alert(JSON.stringify(error)))
 }
 
 async function updateProject(id, data, file) {
@@ -42,5 +42,5 @@ async function updateProject(id, data, file) {
     file,
   })
     .then(() => alert('Project updated'))
-    .catch(error => alert(error.error))
+    .catch(error => alert(JSON.stringify(error)))
 }
