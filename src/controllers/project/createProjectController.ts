@@ -5,7 +5,7 @@ import ProjectStatus from '../../models/project/ProjectStatus'
 export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, description, url, repository } = req.body
-    const cover = req.file && req.file.path.replace('public', '')
+    const cover = (req.file && req.file.path.replace('public', ''))
 
     await Project.create({
       project_id: crypto.randomUUID(),

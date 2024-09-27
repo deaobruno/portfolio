@@ -1,4 +1,3 @@
-import { resolve } from 'node:path'
 import { Request, Response, NextFunction } from 'express'
 import Project from '../../models/project/Project'
 

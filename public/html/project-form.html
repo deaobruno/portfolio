@@ -84,17 +84,18 @@
               <div class="card-body">
                 <form id="projectForm" role="form" class="text-start" enctype="multipart/form-data">
                   <% if (locals.project && locals.project.project_id) { %>
-                    <input type="hidden" name="project_id" value="<%= locals.project && locals.project.project_id %>"/>
+                    <input id="projectId" type="hidden" name="project_id" value="<%= locals.project && locals.project.project_id %>"/>
                   <% } %>
                   <div class="input-group input-group-outline mb-3">
                     <% if (locals.project && locals.project.cover) { %>
                       <img id="cover" src="<%= locals.project.cover %>" style="max-height: 200px;" alt="project cover">
                     <% } else { %>
-                      <img id="cover" style="max-height: 200px; display: none;" alt="project cover">
+                      <img id="cover" src="/images/default-project.jpeg" style="max-height: 200px;" alt="project cover">
                     <% } %>
                   </div>
                   <div class="input-group input-group-outline mb-3">
                     <input id="attachment" type="file" name="attachment" class="form-control"/>
+                    <button id="removeImage" type="button" class="btn bg-gradient-primary mb-0">X</button>
                   </div>
                   <div class="input-group input-group-outline mb-3 <%= locals.project && locals.project.name && 'is-filled' %>">
                     <label class="form-label">Name</label>

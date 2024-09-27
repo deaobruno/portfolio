@@ -17,6 +17,8 @@ import logoutController from './controllers/auth/logoutController'
 import loginFormController from './controllers/web/loginFormController'
 import parseCookiesMiddleware from './middlewares/parseCookiesMiddleware'
 import adminController from './controllers/web/adminController'
+import removeProjectCoverSchema from './schemas/project/removeProjectCoverSchema'
+import removeProjectCoverController from './controllers/project/removeProjectCoverController'
 
 export default (router: Router) => {
   // [web] home
@@ -53,6 +55,12 @@ export default (router: Router) => {
     uploadFileMiddleware,
     validatePayloadMiddleware(updateProjectSchema),
     updateProjectController,
+  )
+  // [api] remove project cover
+  router.put(
+    '/projects/:project_id/remove-cover',
+    validatePayloadMiddleware(removeProjectCoverSchema),
+    removeProjectCoverController,
   )
   // [api] delete project
   router.delete(

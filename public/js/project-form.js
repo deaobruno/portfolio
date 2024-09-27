@@ -20,13 +20,32 @@ document
   .getElementById('attachment')
   .onchange = event => {
     const [file] = event.target.files
-    const cover = document.getElementById('cover')
 
-    if (cover && file) {
-      cover.src = URL.createObjectURL(file)
-      cover.style.display = 'block'
-    }
+    if (file)
+      document.getElementById('cover').src = URL.createObjectURL(file)
   }
+
+document
+  .getElementById('removeImage')
+  .addEventListener('click', async element => {
+    element.preventDefault()
+
+    const projectId = document.getElementById('projectId')
+    
+    if (!projectId) {
+      document.getElementById('attachment').value = null
+      document.getElementById('cover').src = '/images/default-project.jpeg'
+      return
+    }
+    
+    await request
+      .put({ url: `/projects/${projectId.value}/remove-cover` })
+      .then(() => {
+        document.getElementById('attachment').value = null
+        document.getElementById('cover').src = '/images/default-project.jpeg'
+      })
+      .catch(error => alert(JSON.stringify(error)))
+  })
 
 async function createProject(data, file, form) {
   await request.post({
@@ -37,10 +56,7 @@ async function createProject(data, file, form) {
     .then(() => {
       form.reset()
 
-      const cover = document.getElementById('cover')
-
-      cover.style.display = 'none'
-      cover.src = ''
+      document.getElementById('cover').src = '/images/default-project.jpeg'
 
       const inputs = form.getElementsByTagName('input')
 
