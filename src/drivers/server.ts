@@ -27,6 +27,9 @@ app.use((req: Request, res: Response) => res.status(404).send({ error: 'Invalid 
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
   logger.error(error)
 
+  if (req.url !== '/' && req.headers.accept?.split(',')[0] === 'text/html' && error.statusCode === 401)
+    return res.redirect('/login')
+
   res
     .status(error.statusCode || 500)
     .send({ error: error.message })

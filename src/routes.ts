@@ -18,53 +18,42 @@ import loginFormController from './controllers/web/loginFormController'
 import parseCookiesMiddleware from './middlewares/parseCookiesMiddleware'
 
 export default (router: Router) => {
+  // [web] home
   router.get('/', homeController)
+  // [web] login
   router.get('/login', loginFormController)
-  router.get(
-    '/admin/create-project',
-    projectFormController,
-  )
-  router.get(
-    '/admin/update-project/:project_id',
-    projectFormController,
-  )
+  // [api] login
   router.post(
     '/auth',
     validatePayloadMiddleware(loginSchema),
     loginController,
   )
-  router.delete(
-    '/auth',
-    parseCookiesMiddleware,
-    authenticateMiddleware,
-    logoutController,
-  )
+  router.use(parseCookiesMiddleware, authenticateMiddleware)
+  // [api] logout
+  router.delete('/auth', logoutController)
+  // [web] create project
+  router.get('/admin/create-project', projectFormController)
+  // [web] update project
+  router.get('/admin/update-project/:project_id', projectFormController)
+  // [api] create project
   router.post(
     '/projects',
-    parseCookiesMiddleware,
-    authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(createProjectSchema),
     createProjectController,
   )
-  router.get(
-    '/projects',
-    parseCookiesMiddleware,
-    authenticateMiddleware,
-    getProjectsController,
-  )
+  // [api] list projects
+  router.get('/projects', getProjectsController)
+  // [api] update project
   router.put(
     '/projects/:project_id',
-    parseCookiesMiddleware,
-    authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(updateProjectSchema),
     updateProjectController,
   )
+  // [api] delete project
   router.delete(
     '/projects/:project_id',
-    parseCookiesMiddleware,
-    authenticateMiddleware,
     validatePayloadMiddleware(deleteProjectSchema),
     deleteProjectController,
   )
