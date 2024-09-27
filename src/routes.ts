@@ -3,8 +3,6 @@ import createProjectController from './controllers/project/createProjectControll
 import validatePayloadMiddleware from './middlewares/validatePayloadMiddleware'
 import createProjectSchema from './schemas/project/createProjectSchema'
 import getProjectsController from './controllers/project/getProjectsController'
-import getProjectByIdController from './controllers/project/getProjectByIdController'
-import getProjectByIdSchema from './schemas/project/getProjectByIdSchema'
 import deleteProjectController from './controllers/project/deleteProjectController'
 import deleteProjectSchema from './schemas/project/deleteProjectSchema'
 import updateProjectController from './controllers/project/updateProjectController'
@@ -46,11 +44,6 @@ export default (router: Router) => {
     createProjectController,
   )
   router.get('/projects', getProjectsController)
-  router.get(
-    '/projects/:project_id',
-    validatePayloadMiddleware(getProjectByIdSchema),
-    getProjectByIdController,
-  )
   router.put(
     '/projects/:project_id',
     authenticateMiddleware,
