@@ -18,10 +18,27 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
 
     cache.set(email, refresh_token, config.token.refresh.ttl)
 
-    res.send({
+    res
+    .cookie(
+      'access_token',
       access_token,
+      {
+        maxAge: config.token.access.ttl,
+        httpOnly: true,
+        secure: false,
+      },
+    )
+    .cookie(
+      'refresh_token',
       refresh_token,
-    })
+      {
+        maxAge: config.token.refresh.ttl,
+        httpOnly: true,
+        secure: false,
+      },
+    )
+    .status(201)
+    .send({ url: '/' })
   } catch (error) {
     next(error)
   }

@@ -20,13 +20,15 @@ export default (req: Request, res: Response, next: NextFunction) => {
     access = jwt.verify(token, config.token.access.secret)
   } catch (error: any) {
     const message = error.name === 'TokenExpiredError'
-      ? `Access token expired: ${token}`
-      : `Invalid access token: ${token}`
+      ? 'Access token expired'
+      : 'Invalid access token'
 
     return next(UnauthorizedError(message))
   }
 
-  if (access.email !== config.auth.email || access.password !== config.auth.password)
+  const { email } = access
+
+  if (email !== config.auth.email || access.password !== config.auth.password)
     return next(UnauthorizedError())
 
   const refresh: string | undefined = cache.get(access.email)
@@ -37,11 +39,13 @@ export default (req: Request, res: Response, next: NextFunction) => {
     jwt.verify(refresh, config.token.refresh.secret)
   } catch (error: any) {
     const message = error.name === 'TokenExpiredError'
-      ? `Refresh token expired: ${token}`
-      : `Invalid refresh token: ${token}`
+      ? 'Refresh token expired'
+      : 'Invalid refresh token'
 
     return next(UnauthorizedError(message))
   }
+
+  req.user = { email }
 
   next()
 }

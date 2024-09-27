@@ -13,9 +13,12 @@ import uploadFileMiddleware from './middlewares/uploadFileMiddleware'
 import loginController from './controllers/auth/loginController'
 import loginSchema from './schemas/auth/loginSchema'
 import authenticateMiddleware from './middlewares/authenticateMiddleware'
+import logoutController from './controllers/auth/logoutController'
+import loginFormController from './controllers/web/loginFormController'
 
 export default (router: Router) => {
   router.get('/', homeController)
+  router.get('/login', loginFormController)
   router.get(
     '/admin/create-project',
     projectFormController,
@@ -32,9 +35,7 @@ export default (router: Router) => {
   router.delete(
     '/auth',
     authenticateMiddleware,
-    (req, res) => {
-      res.send('logout')
-    }
+    logoutController,
   )
   router.post(
     '/projects',
