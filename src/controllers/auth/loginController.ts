@@ -38,7 +38,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
         },
       )
       .status(201)
-      .send({ url: '/' })
+      .send({ url: '/admin' })
   } catch (error) {
     next(error)
   }

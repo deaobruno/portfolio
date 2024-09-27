@@ -16,6 +16,7 @@ import authenticateMiddleware from './middlewares/authenticateMiddleware'
 import logoutController from './controllers/auth/logoutController'
 import loginFormController from './controllers/web/loginFormController'
 import parseCookiesMiddleware from './middlewares/parseCookiesMiddleware'
+import adminController from './controllers/web/adminController'
 
 export default (router: Router) => {
   // [web] home
@@ -31,6 +32,8 @@ export default (router: Router) => {
   router.use(parseCookiesMiddleware, authenticateMiddleware)
   // [api] logout
   router.delete('/auth', logoutController)
+  // [web] dashboard
+  router.get('/admin', adminController)
   // [web] create project
   router.get('/admin/create-project', projectFormController)
   // [web] update project

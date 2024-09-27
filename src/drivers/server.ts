@@ -23,7 +23,15 @@ app.engine('html', ejs.renderFile)
 app.set('view engine', 'html')
 app.use(logRequestMiddleware)
 app.use(router)
-app.use((req: Request, res: Response) => res.status(404).send({ error: 'Invalid URL' }))
+app.use((req: Request, res: Response) => {
+  if (req.headers.accept?.split(',')[0] === 'text/html' && req.user)
+    return res.redirect('/admin')
+
+  if (req.headers.accept?.split(',')[0] === 'text/html')
+    return res.redirect('/')
+
+  res.status(404).send({ error: 'Invalid URL' })
+})
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
   logger.error(error)
 
