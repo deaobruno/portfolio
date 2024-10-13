@@ -9,13 +9,15 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
         return {
           id: project.project_id,
           name: project.name,
+          description: project.description,
           url: project.url,
           repository: project.repository,
+          cover: project.cover || '/images/default-project.jpeg',
           status: ProjectStatus[project.status],
         }
       })
 
-    res.send(projects)
+    res.send({ projects })
   } catch (error) {
     next(error)
   }
