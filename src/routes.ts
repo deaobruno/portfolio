@@ -31,6 +31,8 @@ export default (router: Router) => {
     validatePayloadMiddleware(loginSchema),
     loginController,
   )
+  // [api] list projects
+  router.get('/projects', getProjectsController)
   router.use(parseCookiesMiddleware, authenticateMiddleware)
   // [api] logout
   router.delete('/auth', logoutController)
@@ -47,8 +49,6 @@ export default (router: Router) => {
     validatePayloadMiddleware(createProjectSchema),
     createProjectController,
   )
-  // [api] list projects
-  router.get('/projects', getProjectsController)
   // [api] update project
   router.put(
     '/projects/:project_id',
