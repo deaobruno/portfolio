@@ -12,7 +12,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
           description: project.description,
           url: project.url,
           repository: project.repository,
-          cover: project.cover || '/images/default-project.jpeg',
+          cover: project.cover ? project.cover.split('public')[1] : '/images/default-project.jpeg',
           status: ProjectStatus[project.status],
         }
       })

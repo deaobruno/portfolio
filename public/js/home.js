@@ -1,163 +1,120 @@
-document.addEventListener('DOMContentLoaded', updateProjects())
+const projectsElement = document.getElementById('projects')
+const contentAnchors = [...document.getElementsByClassName('content-anchor')]
 
-async function updateProjects() {
+contentAnchors.forEach(anchor => anchor.addEventListener('click', scrollToElement))
+
+document.addEventListener('DOMContentLoaded', async () => {
   await request.get({ url: 'http://localhost:3000/projects' })
-    .then(response => {
-      const noProjects = document.getElementById('noProjects')
+    .then(({ projects }) => {
+      if (!projectsElement) return
+      if (!projects || projects.length <= 0) return showNoProjects()
 
-      if (noProjects) noProjects.style.display = 'none'
+      projectsElement.innerHTML = ''
 
-      const tableDiv = document.getElementsByClassName('table-responsive')[0]
-
-      if (!tableDiv) return
-
-      const table = tableDiv.getElementsByClassName('table')[0]
-
-      if (!table) return
-
-      const tableBody = table.getElementsByTagName('tbody')[0]
-
-      if (!tableBody) return
-
-      if (response.length <= 0) return showNoProjects()
-
-      tableBody.innerHTML = ''
-
-      response.forEach(project => {
-        const row = tableBody.insertRow()
-
-        renderProjectName(row, project.name)
-        renderProjectUrl(row, project.url)
-        renderProjectRepository(row, project.repository)
-        renderProjectStatus(row, project.status)
-        renderProjectActions(row, project.id)
-      })
-
-      tableDiv.style.display = 'block'
+      projects.forEach(renderProject)
     })
     .catch(error => {
       console.log(error)
       showNoProjects()
     })
+})
+
+function renderProject(project) {
+  const projectElement = document.createElement('div')
+
+  projectElement.className = 'col-lg-3 col-md-6 portfolio-item'
+
+  const projectImage = document.createElement('img')
+
+  projectImage.className = 'img-fluid'
+  projectImage.src = project.cover
+  projectImage.alt = 'project cover'
+  projectElement.appendChild(projectImage)
+
+  const projectCard = document.createElement('div')
+
+  projectCard.className = 'portfolio-info'
+  projectElement.appendChild(projectCard)
+
+  const projectName = document.createElement('h4')
+
+  projectName.appendChild(document.createTextNode(project.name))
+  projectCard.appendChild(projectName)
+
+  const projectDescription = document.createElement('p')
+
+  projectDescription.appendChild(document.createTextNode(project.description))
+  projectCard.appendChild(projectDescription)
+
+  if (project.url) {
+    const projectUrl = document.createElement('a')
+
+    projectUrl.className = 'glightbox preview-link'
+    projectUrl.href = project.url
+    projectUrl.target = '_blank'
+
+    const projectUrlIcon = document.createElement('i')
+
+    projectUrlIcon.className = 'bi bi-link-45deg'
+    projectUrl.appendChild(projectUrlIcon)
+    projectCard.appendChild(projectUrl)
+  }
+
+  if (project.repository) {
+    const projectRepository = document.createElement('a')
+
+    projectRepository.className = 'details-link'
+    projectRepository.href = project.repository
+    projectRepository.target = '_blank'
+
+    const projectRepositoryIcon = document.createElement('i')
+
+    projectRepositoryIcon.className = 'bi bi-link-45deg'
+    projectRepository.appendChild(projectRepositoryIcon)
+    projectCard.appendChild(projectRepository)
+  }
+
+  projectsElement.appendChild(projectElement)
 }
 
 function showNoProjects() {
-  const tableDiv = document.getElementsByClassName('table-responsive')[0]
-
-  if (!tableDiv) return
-
-  tableDiv.style.display = 'none'
-
-  const cardBody = document.getElementsByClassName('card-body')[0]
-
-  if (!cardBody) return
-
-  const row = document.createElement('div')
-    
-  row.className = 'row'
-  row.id = 'noProjects'
+  if (!projectsElement) return
 
   const col = document.createElement('div')
-    
-  col.className = 'col'
+
+  col.className = 'col-12'
 
   const paragraph = document.createElement('p')
 
   paragraph.appendChild(document.createTextNode('No projects to show'))
   col.appendChild(paragraph)
-  row.appendChild(col)
-  cardBody.appendChild(row)
-  row.style.display = 'flex'
+  projectsElement.innerHTML = col.outerHTML
 }
 
-function renderEmptyCell(row) {
-  row.insertCell().appendChild(document.createTextNode(''))
-}
+function scrollToElement(element) {
+  element.preventDefault()
 
-function renderProjectName(row, name) {
-  if (!name) return renderEmptyCell(row)
+  const target = element.target.closest('a')
 
-  row.insertCell().appendChild(document.createTextNode(name || ''))
-}
+  if (target.classList.contains('active'))
+    return
 
-function renderProjectUrl(row, url) {
-  if (!url) return renderEmptyCell(row)
-
-  const anchor = document.createElement('a')
-
-  anchor.href = url
-  anchor.innerHTML = 'Link'
-  anchor.setAttribute('target', '_blank')
-        
-  row.insertCell().appendChild(anchor)
-}
-
-function renderProjectRepository(row, repository) {
-  if (!repository) return renderEmptyCell(row)
-
-  const anchor = document.createElement('a')
-
-  anchor.href = repository
-  anchor.innerHTML = 'Link'
-  anchor.setAttribute('target', '_blank')
-        
-  row.insertCell().appendChild(anchor)
-}
-
-function renderProjectStatus(row, status) {
-  if (!status) return renderEmptyCell(row)
-
-  row.insertCell().appendChild(document.createTextNode(status || ''))
-}
-
-function renderProjectActions(row, projectId) {
-  const anchor = document.createElement('a')
-        
-  anchor.className = 'cursor-pointer'
-  anchor.id = 'dropdownTable'
-  anchor.setAttribute('data-bs-toggle', 'dropdown')
-  anchor.setAttribute('aria-expanded', 'false')
-
-  const anchorDiv = document.createElement('div')
-
-  anchorDiv.className = 'text-white text-center me-2 d-flex align-items-center justify-content-center'
-
-  const icon = document.createElement('i')
-
-  icon.className = 'fa fa-ellipsis-v text-secondary'
-  anchorDiv.appendChild(icon)
-  anchor.appendChild(anchorDiv)
-
-  const unorderedList = document.createElement('ul')
-
-  unorderedList.className = 'dropdown-menu px-2 py-3 ms-sm-n4 ms-n5'
-  unorderedList.setAttribute('aria-labelledby', 'dropdownTable')
-
-  const updateListItem = document.createElement('li')
-  const updateListItemAnchor = document.createElement('a')
-
-  updateListItemAnchor.className = 'dropdown-item border-radius-md'
-  updateListItemAnchor.href = `/admin/update-project/${projectId}`
-  updateListItemAnchor.innerHTML = 'Update'
-  updateListItem.appendChild(updateListItemAnchor)
-
-  const deleteListItem = document.createElement('li')
-  const deleteListItemAnchor = document.createElement('a')
-
-  deleteListItemAnchor.className = 'dropdown-item border-radius-md'
-  deleteListItemAnchor.style.cursor = 'pointer'
-  deleteListItemAnchor.innerHTML = 'Delete'
-  deleteListItemAnchor.setAttribute('data-project-id', projectId)
-  deleteListItemAnchor.onclick = async event => {
-    event.preventDefault()
-
-    await request.delete({ url: `http://localhost:3000/projects/${projectId}` })
-      .then(async () => await updateProjects())
-      .catch(error => alert(JSON.stringify(error)))
+  const elementTargets = {
+    hero: document.getElementById('hero'),
+    about: document.getElementById('about'),
+    skills: document.getElementById('skills'),
+    portfolio: document.getElementById('portfolio'),
+    contact: document.getElementById('contact'),
   }
-  deleteListItem.appendChild(deleteListItemAnchor)
 
-  unorderedList.append(updateListItem, deleteListItem)
+  contentAnchors.forEach(anchor => anchor.classList.remove('active'))
 
-  row.insertCell().append(anchor, unorderedList)
+  const [host, elementId] = target.href.split('#')
+  const elementTarget = elementTargets[elementId]
+
+  window.history.replaceState(null, '', host)
+
+  scrollTo(0, elementTarget.offsetTop)
+
+  target.classList.add('active')
 }
