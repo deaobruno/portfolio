@@ -46,10 +46,24 @@ function renderProject(project) {
   projectDescription.appendChild(document.createTextNode(project.description))
   projectCard.appendChild(projectDescription)
 
+  if (project.repository) {
+    const projectRepository = document.createElement('a')
+
+    projectRepository.className = 'preview-link'
+    projectRepository.href = project.repository
+    projectRepository.target = '_blank'
+
+    const projectRepositoryIcon = document.createElement('i')
+
+    projectRepositoryIcon.className = 'bi bi-github'
+    projectRepository.appendChild(projectRepositoryIcon)
+    projectCard.appendChild(projectRepository)
+  }
+
   if (project.url) {
     const projectUrl = document.createElement('a')
 
-    projectUrl.className = 'glightbox preview-link'
+    projectUrl.className = 'details-link'
     projectUrl.href = project.url
     projectUrl.target = '_blank'
 
@@ -58,20 +72,6 @@ function renderProject(project) {
     projectUrlIcon.className = 'bi bi-link-45deg'
     projectUrl.appendChild(projectUrlIcon)
     projectCard.appendChild(projectUrl)
-  }
-
-  if (project.repository) {
-    const projectRepository = document.createElement('a')
-
-    projectRepository.className = 'details-link'
-    projectRepository.href = project.repository
-    projectRepository.target = '_blank'
-
-    const projectRepositoryIcon = document.createElement('i')
-
-    projectRepositoryIcon.className = 'bi bi-link-45deg'
-    projectRepository.appendChild(projectRepositoryIcon)
-    projectCard.appendChild(projectRepository)
   }
 
   projectsElement.appendChild(projectElement)
