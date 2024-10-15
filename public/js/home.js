@@ -1,5 +1,11 @@
 const projectsElement = document.getElementById('projects')
 const contentAnchors = [...document.getElementsByClassName('content-anchor')]
+const contactForm = document.getElementById('contactForm')
+const formTextArea = document.getElementsByTagName('textarea').message
+const formSubmit = document.getElementById('formSubmit')
+const formLoading = document.getElementsByClassName('loading')[0]
+const formOkMessage = document.getElementsByClassName('sent-message')[0]
+const formErrorMessage = document.getElementsByClassName('error-message')[0]
 
 contentAnchors.forEach(anchor => anchor.addEventListener('click', scrollToElement))
 
@@ -19,6 +25,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log(error)
       showNoProjects()
     })
+})
+
+formSubmit.addEventListener('click', async element => {
+  element.preventDefault()
+
+  showFormLoading()
+
+  const inputs = contactForm.getElementsByTagName('input')
+  const data = {
+    name: inputs['name'].value,
+    email: inputs['email'].value,
+    subject: inputs['subject'].value,
+    message: formTextArea.value,
+  }
+
+  await request.post({
+    url: '/contact',
+    data,
+  })
+    .then(() => {
+      contactForm.reset()
+      showOkMessage()
+    })
+    .catch(error => showErrorMessage(error.error ? error.error : JSON.stringify(error)))
 })
 
 function renderProject(project) {
@@ -119,4 +149,40 @@ function scrollToElement(element) {
   scrollTo(0, elementTarget.offsetTop)
 
   target.classList.add('active')
+}
+
+function showFormLoading() {
+  clearMessages()
+  formLoading.style.display = 'block'
+}
+
+function hideFormLoading() {
+  formLoading.style.display = 'none'
+}
+
+function showOkMessage() {
+  clearMessages()
+  formOkMessage.style.display = 'block'
+  setTimeout(() => clearMessages(), 5000)
+}
+
+function hideOkMessage() {
+  formOkMessage.style.display = 'none'
+}
+
+function showErrorMessage(message) {
+  clearMessages()
+  formErrorMessage.innerHTML = message
+  formErrorMessage.style.display = 'block'
+  setTimeout(() => clearMessages(), 5000)
+}
+
+function hideErrorMessage() {
+  formErrorMessage.style.display = 'none'
+}
+
+function clearMessages() {
+  hideFormLoading()
+  hideOkMessage()
+  hideErrorMessage()
 }

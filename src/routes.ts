@@ -35,11 +35,13 @@ export default (router: Router) => {
   )
   // [api] list projects
   router.get('/projects', getProjectsController)
+  // [api] send contact email
   router.post(
     '/contact',
     validatePayloadMiddleware(sendContactEmailControllerSchema),
     sendContactEmailController,
   )
+
   // Authentication
   router.use(parseCookiesMiddleware, authenticateMiddleware)
   // [api] logout
