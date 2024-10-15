@@ -19,6 +19,8 @@ import parseCookiesMiddleware from './middlewares/parseCookiesMiddleware'
 import adminController from './controllers/web/adminController'
 import removeProjectCoverSchema from './schemas/project/removeProjectCoverSchema'
 import removeProjectCoverController from './controllers/project/removeProjectCoverController'
+import sendContactEmailControllerSchema from './schemas/contact/sendContactEmailControllerSchema'
+import sendContactEmailController from './controllers/contact/sendContactEmailController'
 
 export default (router: Router) => {
   // [web] home
@@ -33,6 +35,12 @@ export default (router: Router) => {
   )
   // [api] list projects
   router.get('/projects', getProjectsController)
+  router.post(
+    '/contact',
+    validatePayloadMiddleware(sendContactEmailControllerSchema),
+    sendContactEmailController,
+  )
+  // Authentication
   router.use(parseCookiesMiddleware, authenticateMiddleware)
   // [api] logout
   router.delete('/auth', logoutController)
