@@ -72,3 +72,15 @@ textarea {
 .contact .php-email-form textarea {
   background-color: color-mix(in srgb, #ecf0f1, transparent 50%);
 }
+
+.img-fluid {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.portfolio-item {
+  padding-bottom: calc(var(--bs-gutter-x)* .5);
+}
+
+.portfolio .portfolio-item:hover .portfolio-info {
+  bottom: calc(var(--bs-gutter-x)* .5);
+}

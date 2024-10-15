@@ -4,12 +4,14 @@ const contentAnchors = [...document.getElementsByClassName('content-anchor')]
 contentAnchors.forEach(anchor => anchor.addEventListener('click', scrollToElement))
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (!projectsElement) return
+
+  projectsElement.style = ''
+  projectsElement.innerHTML = ''
+
   await request.get({ url: 'http://localhost:3000/projects' })
     .then(({ projects }) => {
-      if (!projectsElement) return
       if (!projects || projects.length <= 0) return showNoProjects()
-
-      projectsElement.innerHTML = ''
 
       projects.forEach(renderProject)
     })
