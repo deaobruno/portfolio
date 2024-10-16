@@ -1,24 +1,40 @@
+import { config } from 'dotenv-safe'
+
+config()
+
 export default {
   http: {
-    port: 3000,
+    port: `${process.env.HTTP_PORT}`,
   },
   auth: {
-    email: 'root@email.com',
-    password: '$2b$10$aZlL9InHPqMZWo1wG9mqgepX.HdLFE/P8gsdl4rcfNq8o6SsXbgMq',
+    email: `${process.env.ROOT_EMAIL}`,
+    password: `${process.env.ROOT_PASSWORD}`,
   },
   token: {
     access: {
-      secret: 'access-token-secret',
+      secret: `${process.env.ACCESS_TOKEN_SECRET}`,
       ttl: 3600,
     },
     refresh: {
-      secret: 'refresh-token-secret',
+      secret: `${process.env.REFRESH_TOKEN_SECRET}`,
       ttl: 7200,
     },
   },
   db: {
     mongo: {
-      url: 'mongodb://127.0.0.1:27017/portfolio',
+      url: `${process.env.MONGODB_URL}`,
+    },
+  },
+  email: {
+    nodemailer: {
+      mailtrap: {
+        host: `${process.env.NODEMAILER_HOST}`,
+        port: parseInt(`${process.env.NODEMAILER_PORT}`),
+        auth: {
+          user: `${process.env.NODEMAILER_USER}`,
+          pass: `${process.env.NODEMAILER_PASSWORD}`,
+        },
+      },
     },
   },
 }
