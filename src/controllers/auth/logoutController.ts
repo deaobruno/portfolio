@@ -15,7 +15,11 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (deleted !== 1)
       return next(InternalServerError('Unable to delete token'))
 
-    res.status(200).send({ url: '/login' })
+    res
+      .clearCookie('access_token')
+      .clearCookie('refresh_token')
+      .status(200)
+      .send({ url: '/login' })
   } catch (error) {
     next(error)
   }

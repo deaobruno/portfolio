@@ -41,20 +41,19 @@ export default (router: Router) => {
     validatePayloadMiddleware(sendContactEmailControllerSchema),
     sendContactEmailController,
   )
-
-  // Authentication
-  router.use(parseCookiesMiddleware, authenticateMiddleware)
+  router.use(parseCookiesMiddleware)
   // [api] logout
-  router.delete('/auth', logoutController)
+  router.delete('/auth', authenticateMiddleware, logoutController)
   // [web] dashboard
-  router.get('/admin', adminController)
+  router.get('/admin', authenticateMiddleware, adminController)
   // [web] create project
-  router.get('/admin/create-project', projectFormController)
+  router.get('/admin/create-project', authenticateMiddleware, projectFormController)
   // [web] update project
-  router.get('/admin/update-project/:project_id', projectFormController)
+  router.get('/admin/update-project/:project_id', authenticateMiddleware, projectFormController)
   // [api] create project
   router.post(
     '/projects',
+    authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(createProjectSchema),
     createProjectController,
@@ -62,6 +61,7 @@ export default (router: Router) => {
   // [api] update project
   router.put(
     '/projects/:project_id',
+    authenticateMiddleware,
     uploadFileMiddleware,
     validatePayloadMiddleware(updateProjectSchema),
     updateProjectController,
@@ -69,12 +69,14 @@ export default (router: Router) => {
   // [api] remove project cover
   router.put(
     '/projects/:project_id/remove-cover',
+    authenticateMiddleware,
     validatePayloadMiddleware(removeProjectCoverSchema),
     removeProjectCoverController,
   )
   // [api] delete project
   router.delete(
     '/projects/:project_id',
+    authenticateMiddleware,
     validatePayloadMiddleware(deleteProjectSchema),
     deleteProjectController,
   )

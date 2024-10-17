@@ -24,13 +24,13 @@ app.set('view engine', 'html')
 app.use(logRequestMiddleware)
 app.use(router)
 app.use((req: Request, res: Response) => {
-  if (req.headers.accept?.split(',')[0] === 'text/html' && req.user)
+  if (!req.headers.accept || req.headers.accept.split(',')[0] === 'application/json' || req.headers.accept.split(',')[0] === '*/*')
+    return res.status(404).send({ error: 'Invalid URL' })
+
+  if (req.cookies && Object.keys(req.cookies).length > 0)
     return res.redirect('/admin')
 
-  if (req.headers.accept?.split(',')[0] === 'text/html')
-    return res.redirect('/')
-
-  res.status(404).send({ error: 'Invalid URL' })
+  return res.redirect('/')
 })
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
   logger.error(error)
