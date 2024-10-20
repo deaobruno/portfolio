@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', updateProjects())
 
 async function updateProjects() {
-  await projectService.getProjects()
+  await projectService.getProjects({ count: 12 })
     .then(({ projects }) => {
       const noProjects = document.getElementById('noProjects')
 

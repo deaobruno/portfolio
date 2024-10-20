@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   projectsElement.style = ''
   projectsElement.innerHTML = ''
 
-  await projectService.getProjects()
+  await projectService.getProjects({ count: 8 })
     .then(({ projects }) => {
       if (!projects || projects.length <= 0) return showNoProjects()
 

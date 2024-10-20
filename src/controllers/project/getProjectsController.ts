@@ -4,7 +4,10 @@ import ProjectStatus from '../../models/project/ProjectStatus'
 
 export default async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
-    const projects = (await Project.find())
+    const { page, count } = req.query
+    const skip = page && typeof page === 'string' ? parseInt(page) : 0
+    const limit = count && typeof count === 'string' ? parseInt(count) : 8
+    const projects = (await Project.find({}, {}, { skip, limit }))
       .map(project => {
         return {
           id: project.project_id,
