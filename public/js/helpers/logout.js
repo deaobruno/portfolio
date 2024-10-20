@@ -1,9 +1,8 @@
 document.getElementById('logout').addEventListener('click', async event => {
   event.preventDefault()
 
-  await request.delete({
-    url: 'http://localhost:3001/auth',
+  await authService.logout({
+    onSuccess: ({ url }) => window.location.replace(url),
+    onError: error => alert(JSON.stringify(error))
   })
-    .then(({ url }) => window.location.replace(url))
-    .catch(error => alert(JSON.stringify(error)))
 })
