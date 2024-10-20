@@ -3,8 +3,19 @@ import { config } from 'dotenv-safe'
 config()
 
 export default {
-  http: {
-    port: `${process.env.HTTP_PORT}`,
+  web: {
+    http: {
+      port: `${process.env.WEB_HTTP_PORT}`,
+    },
+  },
+  api: {
+    http: {
+      port: `${process.env.API_HTTP_PORT}`,
+    },
+  },
+  cors: {
+    origin: `${process.env.WEB_HOST}`,
+    credentials: true,
   },
   auth: {
     email: `${process.env.ROOT_EMAIL}`,

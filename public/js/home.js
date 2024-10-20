@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   projectsElement.style = ''
   projectsElement.innerHTML = ''
 
-  await request.get({ url: 'http://localhost:3000/projects' })
+  await request.get({ url: 'http://localhost:3001/projects' })
     .then(({ projects }) => {
       if (!projects || projects.length <= 0) return showNoProjects()
 
@@ -41,7 +41,7 @@ formSubmit.addEventListener('click', async element => {
   }
 
   await request.post({
-    url: '/contact',
+    url: 'http://localhost:3001/contact',
     data,
   })
     .then(() => {

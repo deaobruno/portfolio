@@ -11,7 +11,7 @@ document
     }
 
     await request.post({
-      url: '/auth',
+      url: 'http://localhost:3001/auth',
       data,
     })
       .then(({ url }) => window.location.replace(url))

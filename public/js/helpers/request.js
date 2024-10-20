@@ -4,6 +4,8 @@ const sendRequest = (method, url, headers, data, file) =>
 
     try {
       xhr.open(method, url, true)
+      xhr.withCredentials = true
+      // xhr.timeout = 30000
 
       if (headers)
         Object.keys(headers).forEach(header => xhr.setRequestHeader(header, headers[header]))
@@ -12,8 +14,7 @@ const sendRequest = (method, url, headers, data, file) =>
       xhr.onreadystatechange = () => {
         if (xhr.readyState !== 4) return
 
-        const responseText = xhr.responseText
-        const response = responseText === '' ? responseText : JSON.parse(responseText)
+        const response = xhr.responseText === '' ? xhr.responseText : JSON.parse(xhr.responseText)
 
         if (xhr.status < 200 || xhr.status >= 400) return reject(response)
 

@@ -49,7 +49,7 @@ document
 
 async function createProject(data, file, form) {
   await request.post({
-    url: '/projects',
+    url: 'http://localhost:3001/projects',
     data,
     file,
   })
@@ -70,7 +70,7 @@ async function createProject(data, file, form) {
 
 async function updateProject(id, data, file) {
   await request.put({
-    url: `/projects/${id}`,
+    url: `http://localhost:3001/projects/${id}`,
     data,
     file,
   })

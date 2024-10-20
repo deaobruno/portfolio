@@ -1,42 +1,33 @@
 import { createServer } from 'node:http'
-import { join } from 'node:path'
 import express, { json, NextFunction, Request, Response, Router, urlencoded } from 'express'
-import ejs from 'ejs'
+import cors from 'cors'
 import logger from './logger'
-import routes from '../routes'
+import authRoutes from '../routes/authRoutes'
+import contactRoutes from '../routes/contactRoutes'
+import adminRoutes from '../routes/adminRoutes'
+import projectsRoutes from '../routes/projectsRoutes'
 import BaseError from '../errors/BaseError'
 import logRequestMiddleware from '../middlewares/logRequestMiddleware'
+import config from '../config'
 
 const app = express()
 const router = Router()
 const server = createServer(app)
-const publicDir = 'public'
-const htmlDir = join(publicDir, 'html')
 
-routes(router)
+authRoutes(router)
+contactRoutes(router)
+adminRoutes(router)
+projectsRoutes(router)
 
 app.use(json())
 app.use(urlencoded({ extended: false }))
-app.use(express.static(publicDir))
-app.set('views', htmlDir)
-app.engine('html', ejs.renderFile)
-app.set('view engine', 'html')
+app.use(cors(config.cors))
 app.use(logRequestMiddleware)
 app.use(router)
-app.use((req: Request, res: Response) => {
-  if (!req.headers.accept || req.headers.accept.split(',')[0] === 'application/json' || req.headers.accept.split(',')[0] === '*/*')
-    return res.status(404).send({ error: 'Invalid URL' })
-
-  if (req.cookies && Object.keys(req.cookies).length > 0)
-    return res.redirect('/admin')
-
-  return res.redirect('/')
-})
+app.use((req: Request, res: Response) => 
+  res.status(404).send({ error: 'Invalid URL' }))
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
-  logger.error(error)
-
-  if (req.url !== '/' && req.headers.accept?.split(',')[0] === 'text/html' && error.statusCode === 401)
-    return res.redirect('/login')
+  logger.debug('[api]', error)
 
   res
     .status(error.statusCode || 500)
@@ -56,6 +47,6 @@ export default {
       )
         address = serverAddress.address
   
-      logger.info(`[Express] HTTP Server started: http://${address}:${port}`)
+      logger.info(`[api] Express HTTP Server started: http://${address}:${port}`)
     })
 }

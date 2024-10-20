@@ -26,6 +26,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
           maxAge: config.token.access.ttl * 1000,
           httpOnly: true,
           secure: false,
+          domain: 'localhost',
         },
       )
       .cookie(
@@ -35,6 +36,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
           maxAge: config.token.refresh.ttl * 1000,
           httpOnly: true,
           secure: false,
+          domain: 'localhost',
         },
       )
       .status(201)
