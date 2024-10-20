@@ -18,6 +18,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
         query,
         file,
       },
+      response: {
+        headers: res.getHeaders(),
+      },
     })
   })
 
