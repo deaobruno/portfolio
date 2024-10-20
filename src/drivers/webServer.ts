@@ -26,13 +26,13 @@ app.use((req: Request, res: Response) => {
   return res.redirect('/')
 })
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
-  logger.debug('[web]', error)
-
-  if (req.cookies && Object.keys(req.cookies).length > 0)
-    return res.redirect('/admin')
+  logger.debug(`[web] ${error.stack}`)
 
   if (req.url !== '/' && error.statusCode === 401)
     return res.redirect('/login')
+
+  if (req.cookies && Object.keys(req.cookies).length > 0)
+    return res.redirect('/admin')
 
   return res.redirect('/')
 })

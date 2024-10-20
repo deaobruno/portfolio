@@ -27,7 +27,7 @@ app.use(router)
 app.use((req: Request, res: Response) => 
   res.status(404).send({ error: 'Invalid URL' }))
 app.use((error: BaseError, req: Request, res: Response, next: NextFunction) => {
-  logger.debug('[api]', error)
+  logger.debug(`[api] ${error.stack}`)
 
   res
     .status(error.statusCode || 500)
