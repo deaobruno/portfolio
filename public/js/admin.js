@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', updateProjects())
 
 async function updateProjects() {
-  await request.get({ url: 'http://localhost:3001/projects' })
+  await projectService.getProjects()
     .then(({ projects }) => {
       const noProjects = document.getElementById('noProjects')
 
@@ -151,8 +151,8 @@ function renderProjectActions(row, projectId) {
   deleteListItemAnchor.onclick = async event => {
     event.preventDefault()
 
-    await request.delete({ url: `http://localhost:3001/projects/${projectId}` })
-      .then(async () => await updateProjects())
+    await projectService.deleteProject(projectId)
+      .then(() => updateProjects())
       .catch(error => alert(JSON.stringify(error)))
   }
   deleteListItem.appendChild(deleteListItemAnchor)

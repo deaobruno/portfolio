@@ -48,11 +48,7 @@ document
   })
 
 async function createProject(data, file, form) {
-  await request.post({
-    url: 'http://localhost:3001/projects',
-    data,
-    file,
-  })
+  await projectService.createProject(data, file)
     .then(() => {
       form.reset()
 
@@ -69,8 +65,8 @@ async function createProject(data, file, form) {
 }
 
 async function updateProject(id, data, file) {
-  await request.put({
-    url: `http://localhost:3001/projects/${id}`,
+  await projectService.updateProject({
+    id,
     data,
     file,
   })

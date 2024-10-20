@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   projectsElement.style = ''
   projectsElement.innerHTML = ''
 
-  await request.get({ url: 'http://localhost:3001/projects' })
+  await projectService.getProjects()
     .then(({ projects }) => {
       if (!projects || projects.length <= 0) return showNoProjects()
 
