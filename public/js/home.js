@@ -40,14 +40,12 @@ formSubmit.addEventListener('click', async element => {
     message: formTextArea.value,
   }
 
-  await contactService.sendMessage({
-    data,
-    onSuccess: () => {
+  await contactService.sendMessage(data)
+    .then(() => {
       contactForm.reset()
       showOkMessage()
-    },
-    onError: error => showErrorMessage(error.error ? error.error : JSON.stringify(error)),
-  })
+    })
+    .catch(error => showErrorMessage(error.error ? error.error : JSON.stringify(error)))
 })
 
 function renderProject(project) {

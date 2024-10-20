@@ -10,9 +10,7 @@ document
       password: inputs['password'].value,
     }
 
-    await authService.login({
-      data,
-      onSuccess: ({ url }) => window.location.replace(url),
-      onError: error => alert(JSON.stringify(error)),
-    })
+    await authService.login(data)
+      .then(({ url }) => window.location.replace(url))
+      .catch(error => alert(JSON.stringify(error)))
   })
