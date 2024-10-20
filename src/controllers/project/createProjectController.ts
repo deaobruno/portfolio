@@ -18,7 +18,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
       created_at: new Date(),
     })
 
-    res.send()
+    res.status(201).send()
   } catch (error) {
     next(error)
   }
