@@ -1,9 +1,9 @@
 const projectService = {
   createProject: (data, file) => request
-    .post({ url: 'http://localhost:3001/projects', data, file }),
-  getProjects: () => request.get({ url: 'http://localhost:3001/projects' }),
+    .post({ url: `${apiHost}/projects`, data, file }),
+  getProjects: () => request.get({ url: `${apiHost}/projects` }),
   updateProject: ({ id, data, file }) => request
-    .put({ url: `http://localhost:3001/projects/${id}`, data, file }),
+    .put({ url: `${apiHost}/projects/${id}`, data, file }),
   deleteProject: projectId => request
-    .delete({ url: `http://localhost:3001/projects/${projectId}` }),
+    .delete({ url: `${apiHost}/projects/${projectId}` }),
 }

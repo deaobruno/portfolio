@@ -1,3 +1,4 @@
+const apiHost = 'http://localhost:3001'
 const sendRequest = (method, url, headers, data, file) =>
   new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()

@@ -1,7 +1,7 @@
 const authService = {
   login: data => request.post({
-    url: 'http://localhost:3001/auth',
+    url: `${apiHost}/auth`,
     data,
   }),
-  logout: () => request.delete({ url: 'http://localhost:3001/auth' }),
+  logout: () => request.delete({ url: `${apiHost}/auth` }),
 }
